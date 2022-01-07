@@ -23,7 +23,11 @@ const Meals = (props) => {
   const [cartData, setCartData] = useState([]);
   const [meals, setMeals] = useState([]);
   const [allMeals,setAllMeals]=useState([])
-  cartVal = cartData;
+  const {navigation}=props;
+
+  useEffect(()=>{
+    navigation.setParams({cartVal:cartData})
+  },[cartData])
 
   const renderMealItem = (itemData) => {
     return (
@@ -51,10 +55,11 @@ const Meals = (props) => {
   };
 
   const getdata = async () => {
-    const response = await fetch("http://192.168.29.157:3000/data");
+
+    const response = await fetch("https://rn-assignment-fff1d-default-rtdb.firebaseio.com/data.json");
     const resData = await response.json();
-    setAllMeals(resData.data)
-    setMeals(resData.data)
+    setAllMeals(resData)
+    setMeals(resData)
   };
 
   useEffect(() => {
@@ -84,6 +89,7 @@ const Meals = (props) => {
 };
 
 Meals.navigationOptions = (navigationData) => {
+  const cartVal=navigationData.navigation.getParam('cartVal')
   return {
     headerTitle: "Meals",
     headerRight: () => (
